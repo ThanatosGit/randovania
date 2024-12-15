@@ -99,15 +99,21 @@ async def test_new_received_pickups_received(connector: MSRRemoteConnector):
 
 async def test_set_remote_pickups(connector: MSRRemoteConnector, msr_ice_beam_pickup):
     connector.receive_remote_pickups = AsyncMock()
-    pickup_entry_with_owner = (("Dummy 1", msr_ice_beam_pickup), ("Dummy 2", msr_ice_beam_pickup))
-    await connector.set_remote_pickups(pickup_entry_with_owner)
-    assert connector.remote_pickups == pickup_entry_with_owner
+    remote_pickup = (
+        ("Dummy 1", msr_ice_beam_pickup, PickupIndex(1), "UUID"),
+        ("Dummy 2", msr_ice_beam_pickup, PickupIndex(2), "UUID"),
+    )
+    await connector.set_remote_pickups(remote_pickup)
+    assert connector.remote_pickups == remote_pickup
 
 
 async def test_receive_remote_pickups(connector: MSRRemoteConnector, msr_ice_beam_pickup):
     connector.in_cooldown = False
-    pickup_entry_with_owner = (("Dummy 1", msr_ice_beam_pickup), ("Dummy 2", msr_ice_beam_pickup))
-    connector.remote_pickups = pickup_entry_with_owner
+    remote_pickup = (
+        ("Dummy 1", msr_ice_beam_pickup, PickupIndex(1), "UUID"),
+        ("Dummy 2", msr_ice_beam_pickup, PickupIndex(2), "UUID"),
+    )
+    connector.remote_pickups = remote_pickup
     connector.executor.run_lua_code = AsyncMock()
 
     connector.received_pickups = None
@@ -135,11 +141,11 @@ async def test_receive_remote_pickups(connector: MSRRemoteConnector, msr_ice_bea
         "MultiworldPickup = MultiworldPickup or {}\\\n    "
         "function MultiworldPickup.main()\\\n    "
         "end\\\n\\\n    "
-        "function MultiworldPickup.OnPickedUp(progression, actorOrName)\\\n        "
-        "RandomizerPowerup.OnPickedUp(progression, actorOrName)\\\n    "
+        "function MultiworldPickup.OnPickedUp(progression, actorOrName, regionName)\\\n        "
+        "RandomizerPowerup.OnPickedUp(progression, actorOrName, regionName)\\\n    "
         "end\\\n    \\\n"
         'MultiworldPickup.OnPickedUp({\\\n{\\\n{\\\nitem_id = "ITEM_WEAPON_ICE_BEAM",\\\nquantity = 1,\\\n},\\\n},\\\n}'
-        ", nil)',0,2)"
+        ',nil,"")\',0,2)'
     )
     connector.executor.run_lua_code.assert_called_once_with(execute_string)
 
