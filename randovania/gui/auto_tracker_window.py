@@ -142,10 +142,12 @@ class AutoTrackerWindow(QtWidgets.QMainWindow, Ui_AutoTrackerWindow):
 
     def delete_tracker(self):
         if self.item_tracker is not None:
+            self.item_tracker.setParent(None)
             self.item_tracker.deleteLater()
             self.item_tracker = None
 
         if self._dummy_tracker is not None:
+            self._dummy_tracker.setParent(None)
             self._dummy_tracker.deleteLater()
             self._dummy_tracker = None
 
