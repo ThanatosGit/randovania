@@ -1,5 +1,5 @@
 {
-    "schema_version": 121,
+    "schema_version": 122,
     "base_preset_uuid": null,
     "name": "Starter Preset",
     "uuid": "47a273e1-9d29-4c10-b1d2-410906e8a87f",
@@ -27,7 +27,7 @@
                     "num_shuffled_pickups": 2
                 },
                 "Boon of Plenty": {
-                    "num_shuffled_pickups": 1
+                    "num_included_in_starting_pickups": 1
                 },
                 "Kickback": {
                     "num_shuffled_pickups": 1
@@ -135,7 +135,7 @@
                     "num_included_in_starting_pickups": 1
                 },
                 "Treasure Map": {
-                    "num_shuffled_pickups": 1
+                    "num_included_in_starting_pickups": 1
                 },
                 "Wallet Upgrade": {
                     "num_shuffled_pickups": 10
